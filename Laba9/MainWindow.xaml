@@ -4,9 +4,72 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Laba9"
+        xmlns:inf="clr-namespace:Laba9.Infrastructure"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Height="600" Width="800">
+
+    <Window.Resources>
+        <inf:ImageSourceConverter x:Key="ImageConverter"/>
+    </Window.Resources>
+    <Grid Margin="10" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         
+        <StackPanel>
+            <TextBlock>Выберите вид транспорта:</TextBlock>
+            <ComboBox x:Name="cBoxTransport" Margin="0,10,10,10" DisplayMemberPath="TransportName" ItemsSource="{Binding}" SelectedValuePath="TransportId" SelectedIndex="0"/>
+            <Button Margin="5" Content="Добавить новый вид транспорта" Click="Button_Add_Transport_Click"/>
+            <Button Margin="5" Content="Редактировать вид транспорта" Click="Button_Edit_Transport_Click"/>
+            <Button Margin="5" Content="Удалить вид транспорта" Click="Button_Delete_Transport_Click"/>
+        </StackPanel>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.25*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" HorizontalAlignment="Center">Описание вида транспорта:</TextBlock>
+            <TextBlock Grid.Row="1" TextWrapping="WrapWithOverflow"  TextAlignment="Center"
+            Text="{Binding ElementName=cBoxTransport, Path=SelectedItem.TransportDescription}" Margin="0,30,0,0"/>
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <WrapPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                <Button Margin="5" Content="Добавить транспорт" Click="Button_Add_Car_Click"/>
+                <Button Margin="5" Content="Редактировать транспорт" Click="Button_Edit_Car_Click"/>
+                <Button Margin="5" Content="Удалить транспорт" Click="Button_Delete_Car_Click"/>
+            </WrapPanel>
+        </Grid>
+        
+        <ScrollViewer Grid.Row="2" Grid.ColumnSpan="2">
+            <ListBox Name="lbCars"                      
+                DataContext="{Binding ElementName=cBoxTransport,Path=SelectedItem}"
+                ItemsSource="{Binding Path=Cars}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate >
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Width="80" Source="{Binding Path=FileName, Converter={StaticResource ImageConverter}}"/>
+                            <StackPanel Grid.Column="1" >
+                                <TextBlock Text="{Binding Path=Brand}" Margin="30,0,0,0"/>
+                                <TextBlock Text="{Binding Path=Model}" Margin="30,0,0,0"/>
+                                <TextBlock Text="{Binding Path=Year}" Margin="30,0,0,0"/>
+                                <TextBlock Text="{Binding Path=Color}" Margin="30,0,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
     </Grid>
 </Window>
